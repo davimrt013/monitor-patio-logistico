@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor de Pátio</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="theme-light">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <img id="company-logo" src="" alt="Logo" class="logo" style="display: none;">
+            <span class="logo-placeholder">LOGO</span>
+        </div>
+        <h1 class="header-title">Monitor de Pátio</h1>
+        <div class="header-right">
+            <button id="theme-toggle" class="icon-btn" title="Alternar tema">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button id="settings-btn" class="icon-btn" title="Configurações">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <button id="kanban-tab" class="nav-tab active">
+            <i class="fas fa-columns"></i>
+            Kanban
+        </button>
+        <button id="planilha-tab" class="nav-tab">
+            <i class="fas fa-table"></i>
+            Planilha
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Kanban View -->
+        <div id="kanban-view" class="view active">
+            <div class="kanban-controls">
+                <button id="add-vehicle-btn" class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Cadastrar Veículo
+                </button>
+                <div class="filter-controls">
+                    <label for="client-filter">Filtrar por Cliente:</label>
+                    <select id="client-filter">
+                        <option value="">Todos os Clientes</option>
+                    </select>
+                </div>
+                <button id="export-image-btn" class="btn btn-secondary">
+                    <i class="fas fa-camera"></i>
+                    Exportar Imagem
+                </button>
+            </div>
+            
+            <div class="kanban-board">
+                <div class="kanban-column" data-status="Pátio">
+                    <div class="column-header patio">
+                        <i class="fas fa-parking"></i>
+                        PÁTIO
+                        <span class="count">0</span>
+                    </div>
+                    <div class="column-content" id="patio-column"></div>
+                </div>
+                
+                <div class="kanban-column" data-status="Doca">
+                    <div class="column-header doca">
+                        <i class="fas fa-truck-loading"></i>
+                        DOCA
+                        <span class="count">0</span>
+                    </div>
+                    <div class="column-content" id="doca-column"></div>
+                </div>
+                
+                <div class="kanban-column" data-status="Finalizado">
+                    <div class="column-header finalizado">
+                        <i class="fas fa-check-circle"></i>
+                        FINALIZADOS
+                        <span class="count">0</span>
+                    </div>
+                    <div class="column-content" id="finalizado-column"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Planilha View -->
+        <div id="planilha-view" class="view">
+            <div class="planilha-controls">
+                <button id="add-vehicle-planilha-btn" class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Cadastrar Veículo
+                </button>
+                <div class="filter-controls">
+                    <input type="text" id="search-input" placeholder="Buscar...">
+                    <select id="status-filter">
+                        <option value="">Todos os Status</option>
+                        <option value="Pátio">Pátio</option>
+                        <option value="Doca">Doca</option>
+                        <option value="Finalizado">Finalizado</option>
+                        <option value="NO-SHOW">NO-SHOW</option>
+                    </select>
+                </div>
+                <button id="export-excel-btn" class="btn btn-secondary">
+                    <i class="fas fa-file-excel"></i>
+                    Exportar Excel
+                </button>
+            </div>
+            
+            <div class="table-container">
+                <table id="vehicles-table">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Placa</th>
+                            <th>Motorista</th>
+                            <th>Transportadora</th>
+                            <th>Cliente</th>
+                            <th>NF/DT/SENHA</th>
+                            <th>Observações</th>
+                            <th>Tipo de Veículo</th>
+                            <th>Operação</th>
+                            <th>Tipo</th>
+                            <th>Status</th>
+                            <th>HR Agendada</th>
+                            <th>HR Chegada</th>
+                            <th>HR Doca</th>
+                            <th>HR Saída de Doca</th>
+                            <th>HR Saída do CD</th>
+                            <th>Tempo Total Em Doca</th>
+                            <th>Tempo Total CD</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vehicles-tbody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <span>by Davi Martins</span>
+        <a href="https://www.linkedin.com/in/davi-martins-log" target="_blank" class="linkedin-link">
+            <i class="fab fa-linkedin"></i>
+        </a>
+    </footer>
+
+    <!-- Modals -->
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Configurações</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="config-section">
+                    <h3>Logo da Empresa</h3>
+                    <input type="file" id="logo-upload" accept="image/*">
+                    <button id="remove-logo-btn" class="btn btn-danger">Remover Logo</button>
+                </div>
+                
+                <div class="config-section">
+                    <h3>Backup de Dados</h3>
+                    <button id="export-backup-btn" class="btn btn-primary">Exportar Backup (JSON)</button>
+                    <input type="file" id="import-backup" accept=".json" style="display: none;">
+                    <button id="import-backup-btn" class="btn btn-secondary">Importar Backup (JSON)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vehicle Modal -->
+    <div id="vehicle-modal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 id="vehicle-modal-title">Cadastrar Veículo</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="vehicle-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="data">Data:</label>
+                            <input type="date" id="data" name="data">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="placa">Placa:</label>
+                            <input type="text" id="placa" name="placa" style="text-transform: uppercase;">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="motorista">Motorista:</label>
+                            <input type="text" id="motorista" name="motorista">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="transportadora">Transportadora:</label>
+                            <input type="text" id="transportadora" name="transportadora">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cliente">Cliente:</label>
+                            <input type="text" id="cliente" name="cliente">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="nf_dt_senha">NF/DT/SENHA:</label>
+                            <input type="text" id="nf_dt_senha" name="nf_dt_senha">
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="observacoes">Observações:</label>
+                            <textarea id="observacoes" name="observacoes" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="tipo_veiculo">Tipo de Veículo:</label>
+                            <select id="tipo_veiculo" name="tipo_veiculo">
+                                <option value="">Selecione...</option>
+                                <option value="Truck">Truck</option>
+                                <option value="Toco">Toco</option>
+                                <option value="Carreta">Carreta</option>
+                                <option value="Sider">Sider</option>
+                                <option value="Aberto">Aberto</option>
+                                <option value="Bitrem">Bitrem</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="operacao">Operação:</label>
+                            <select id="operacao" name="operacao">
+                                <option value="">Selecione...</option>
+                                <option value="Recebimento">Recebimento</option>
+                                <option value="Devolução">Devolução</option>
+                                <option value="Cross Docking">Cross Docking</option>
+                                <option value="Expedição">Expedição</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="tipo">Tipo:</label>
+                            <select id="tipo" name="tipo">
+                                <option value="">Selecione...</option>
+                                <option value="Estivado">Estivado</option>
+                                <option value="Paletizado">Paletizado</option>
+                                <option value="Misto">Misto</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="status">Status:</label>
+                            <select id="status" name="status">
+                                <option value="">Selecione...</option>
+                                <option value="Pátio">Pátio</option>
+                                <option value="Doca">Doca</option>
+                                <option value="Finalizado">Finalizado</option>
+                                <option value="NO-SHOW">NO-SHOW</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="hr_agendada">HR Agendada:</label>
+                            <input type="datetime-local" id="hr_agendada" name="hr_agendada">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="hr_chegada">HR Chegada:</label>
+                            <input type="datetime-local" id="hr_chegada" name="hr_chegada">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="hr_doca">HR Doca:</label>
+                            <input type="datetime-local" id="hr_doca" name="hr_doca">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="hr_saida_doca">HR Saída de Doca:</label>
+                            <input type="datetime-local" id="hr_saida_doca" name="hr_saida_doca">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="hr_saida_cd">HR Saída do CD:</label>
+                            <input type="datetime-local" id="hr_saida_cd" name="hr_saida_cd">
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="cancel-btn">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/kanban.js"></script>
+    <script src="js/spreadsheet.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
+
