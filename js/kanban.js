@@ -291,7 +291,7 @@ class KanbanManager {
 
             const canvas = await html2canvas(kanbanBoard, {
                 backgroundColor: getComputedStyle(document.body).backgroundColor,
-                scale: 2, // Higher resolution
+                scale: 4, // Higher resolution
                 useCORS: true,
                 allowTaint: true,
                 height: kanbanBoard.scrollHeight,
